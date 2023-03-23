@@ -1,7 +1,9 @@
 import random
-from core.errors import *
-from core.items import *
-from core.shoppinglist import *
+from core.items import Item, ItemPool
+from core.shoppinglist import ShoppingList
+# from core.errors import (InvalidItemNameError, InvalidItemPoolError, 
+#                          InvalidItemPriceError, InvalidShoppingListSizeError, 
+#                          DuplicateItemError, NonExistingItemError)
 
 class AppEngine:
     def __init__(self, shoppingList = None, items = None):
@@ -35,7 +37,8 @@ class AppEngine:
             self.process_ask()
         elif cmd == 'l' or cmd == 'list':
             self.shopping_list.refresh(item_pool = self.items)
-            self.message = (f'Shopping list with {len(self.shopping_list)} items has been created.')
+            self.message = (f'Shopping list with {len(self.shopping_list)}\
+                             items has been created.')
         elif cmd.startswith('show'):
             self.process_show(cmd)
         elif cmd.startswith('add'):
@@ -58,18 +61,33 @@ class AppEngine:
         if answer == self.correct_answer:
             self.message = 'Correct!'
         else:
-            self.message = f'Not Correct! (Expected ${self.correct_answer:.02f})\nYou answered ${answer:.02f}.'
+            self.message = f'Not Correct! (Expected ${self.correct_answer:.02f})\n\
+                You answered ${answer:.02f}.'
         self.correct_answer = None
 
     def process_show(self, cmd):
         what = cmd[ 5: ]
         if what == 'items' :
-            self.message = self.items.show_items()
+            self.message = self.show_items()
         elif what == 'list' :
             self.message = self.shopping_list.show_list()
         else:
             self.message= f'Cannot show {what}.\n'
             self.message += 'Usage: show list|items'
+
+    def show_items(self):
+        max_name, max_order = 0, 0
+        for item in self.items.values():
+            max_name = max(max_name, len(item.name))
+            max_order = max(max_order, item.get_order())
+        out = 'ITEMS\n'
+        for item_name in sorted(self.items.keys()):
+            item = self.items[item_name]
+            padding = (max_name - len(item_name) + 3) * '.'
+            out += f'{item.get_list_item_str(quantity=None)}{padding}\
+                {item.get_price_str(order=max_order)}\n'
+        return out
+
 
     def process_add_item(self, cmd):
         item_str = cmd[4:]

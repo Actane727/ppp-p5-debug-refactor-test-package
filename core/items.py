@@ -1,7 +1,8 @@
 import math
 import random
 
-from core.errors import *
+from core.errors import InvalidItemPriceError, InvalidItemNameError,\
+                         InvalidItemPoolError, DuplicateItemError, NonExistingItemError
 
 class Item:
     def __init__(self, name, price):
@@ -15,13 +16,7 @@ class Item:
     def get_order(self):
         return math.floor(round(math.log(self.price, 10), 10))
 
-    def item2line(self, quantity = None, hide_price = False, order = None, padding = 0, leading_dash = True):
-        # quantity
-        if quantity is None:
-            qnt_str = ''
-        else:
-            qnt_str = f' ({quantity}x)'
-
+    def get_price_str(self, quantity = None, hide_price = False, order = None):
         # price
         if order is None:
             order = self.get_order()
@@ -30,20 +25,31 @@ class Item:
         if hide_price:
             prcStr = f'${"?" * (order + 1)}.??'
 
+        return f'{prcStr}'
+
+    def get_list_item_str(self, quantity = None, leading_dash = True):
+        # quantity
+        if quantity is None:
+            qnt_str = ''
+        else:
+            qnt_str = f' ({quantity}x)'
+
         # dash
         dash = ''
         if leading_dash:
             dash = '- '
-        return f'{dash}{self.name}{qnt_str} ...{"." * padding} {prcStr}'
+        return f'{dash}{self.name}{qnt_str}'
+
     
     def __repr__(self):
         return f'Item({self.name}, {self.price})'
     
     def __eq__(self, other):
-        return isinstance(other, Item) and self.name == other.name and self.price == other.price
+        return isinstance(other, Item) and self.name == other.name\
+              and self.price == other.price
            
 
-class ItemPool:
+class ItemPool (Item):
     def __init__(self, items = None):
         if not items:
             items = {}
@@ -70,18 +76,21 @@ class ItemPool:
         return len(self.items)
 
     def sample_items(self, sample_size):
-        return random.sample(list(self.items.values()), min(sample_size, len(self.items)))
+        return random.sample(list(self.items.values()),\
+                              min(sample_size, len(self.items)))
 
-    def show_items(self):
-        max_name, max_order = 0, 0
-        for item in self.items.values():
-            max_name = max(max_name, len(item.name))
-            max_order = max(max_order, item.get_order())
-        out = 'ITEMS\n'
-        for item_name in sorted(self.items.keys()):
-            item = self.items[item_name]
-            out += item.item2line(padding=max_name - len(item_name), order=max_order) + '\n'
-        return out
+    # def show_items(self):
+    #     max_name, max_order = 0, 0
+    #     for item in self.items.values():
+    #         max_name = max(max_name, len(item.name))
+    #         max_order = max(max_order, item.get_order())
+    #     out = 'ITEMS\n'
+    #     for item_name in sorted(self.items.keys()):
+    #         item = self.items[item_name]
+    #         padding = (max_name - len(item_name) + 3) * '.'
+    #         out += f'{item.get_list_item_str(quantity=None)}{padding}\
+    #             {item.get_price_str(order=max_order)}\n'
+    #     return out
     
     def __repr__(self):
         return f'ItemPool({self.items})'
