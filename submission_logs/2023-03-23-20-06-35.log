@@ -1,0 +1,18 @@
+[DEBUG] 2023-03-23 GMT-0500 20:06:35.279: The Username is set to (keyring app): BRI2369395@maricopa.edu
+[DEBUG] 2023-03-23 GMT-0500 20:06:35.295: The Submission Password is set to (keyring app): ***
+[INFO] 2023-03-23 GMT-0500 20:06:35.295: Submission process STARTED.
+[INFO] 2023-03-23 GMT-0500 20:06:35.295: Asking for agreement.
+[DEBUG] 2023-03-23 GMT-0500 20:06:38.045: Agreement answer: I AGREE
+[DEBUG] 2023-03-23 GMT-0500 20:06:38.047: Task signature: sail-programming-with-python-ppp-p5-debug-refactor-test-package-v2-task-2
+[INFO] 2023-03-23 GMT-0500 20:06:38.047: Collecting information about context.
+[INFO] 2023-03-23 GMT-0500 20:06:39.622: Finding files for submission.
+[INFO] 2023-03-23 GMT-0500 20:06:39.622: Generating submission files for task 2.
+[INFO] 2023-03-23 GMT-0500 20:06:39.622: Evaluating task 2.
+[INFO] 2023-03-23 GMT-0500 20:06:40.017: Submission archive generated.
+[INFO] 2023-03-23 GMT-0500 20:06:40.017: Sending the submission to Sail() Auto-grading Service.
+[DEBUG] 2023-03-23 GMT-0500 20:06:41.237: AGS Success: True
+[DEBUG] 2023-03-23 GMT-0500 20:06:41.237: AGS Status: 200
+[DEBUG] 2023-03-23 GMT-0500 20:06:41.237: AGS Message: Your submission is in processing, submission token is: BRI2369395@maricopa.edu_ppp-p5-debug-refactor-test-package_task-2_1258528121 Wait and check your code, score and feedback on your Learning Management System.
+[INFO] 2023-03-23 GMT-0500 20:06:41.237: Finding files for cleanup.
+[INFO] 2023-03-23 GMT-0500 20:06:41.249: Cleanup finished.
+[INFO] 2023-03-23 GMT-0500 20:06:41.249: Submission process FINISHED.
