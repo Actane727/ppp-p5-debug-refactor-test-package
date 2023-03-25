@@ -13,15 +13,15 @@ class AppEngine:
 
 
     def process_answer(self, cmd):
-        if isinstance(cmd, int, float):
+        try:
             answer = round(float(cmd), 2)
             if answer == self.correct_answer:
                 self.message = 'Correct!'
             else:
                 self.message = (f'Not Correct! (Expected ${self.correct_answer:.02f})\n'
                                 f'You answered ${answer:.02f}.')
-        else:
-            self.mesage = ('The provided answer is not a valid number.')
+        except ValueError:
+            self.message = InvalidItemPriceError(cmd)
         self.correct_answer = None
 
 
@@ -30,17 +30,7 @@ class AppEngine:
         item_tuple = item_str.split(': ')
         if len(item_tuple)==2:
             name, price = item_tuple
-            try:
-                self.price = float(price)
-                item = Item(name, self.price)
-                self.items.add_item(item)
-                self.message = f'{item} added successfully.'
-            except ValueError:
-                print(f'Could not convert string to float: "{self.price}".')
-            except InvalidItemNameError(name):
-                print(f'Invalid item name: "{name}".')
-            except InvalidItemPriceError(price):
-                print(f'Could not convert string to float: "{self.price}".')
+            self.validate_add_item(name, price)
         else:
             self.message = f'Cannot add "{item_str}".\n'
             self.message += 'Usage: add <item_name>: <item_price>'
@@ -48,6 +38,27 @@ class AppEngine:
 
     def process_del_item(self, cmd):
         item_name = cmd[4: ]
-        self.items.remove_item( item_name )
-        self.message =f'{item_name} removed successfully.'
+        try:
+            self.items.remove_item(item_name)
+            self.message =f'{item_name} removed successfully.'
+        except NonExistingItemError as e:  
+            self.message = e
+
+    def validate_add_item(self, item, price):
+        try:
+            isinstance(item, str) is True
+            try:
+                price = float(price)
+            except ValueError:
+                self.message = InvalidItemPriceError(price)
+            item = Item(item, price)
+            type(item) is Item is True
+            self.items.add_item(item)
+            self.message = f'{item} added successfully.'        
+        except InvalidItemNameError as e:
+            self.message = e
+        except InvalidItemPriceError as e:
+            self.message = e
+        except DuplicateItemError as e:
+            self.message = e
 

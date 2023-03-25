@@ -6,17 +6,12 @@ from core.errors import InvalidItemPriceError, InvalidItemNameError,\
 
 class Item:
     def __init__(self, name, price):
-        try:
-            if type(name) != str or not name:
-                raise InvalidItemNameError(name)
-            self.name = name
-            if not isinstance(price, (float, int)) or not price > 0:
-                raise InvalidItemPriceError(price)
-            self.price = round(price, 2)
-        except InvalidItemNameError(name):
-            print(f'Invalid item name: "{name}".')
-        except InvalidItemPriceError(price):
-            print(f'Could not convert string to float: "{price}".')
+        if type(name) != str or not name:
+            raise InvalidItemNameError(name)
+        self.name = name
+        if not isinstance(price, (float, int)) or not price > 0:
+            raise InvalidItemPriceError(price)
+        self.price = round(price, 2)
 
 
     def get_order(self):
@@ -60,39 +55,27 @@ class Item:
 
 class ItemPool (Item):
     def __init__(self, items = None):
-        try:
-            if not items:
-                items = {}
-            if type(items) != dict:
+        if not items:
+            items = {}
+        if type(items) != dict:
+            raise InvalidItemPoolError()
+        for key, val in items.items():
+            if type(key) != str or type(val) != Item:
                 raise InvalidItemPoolError()
-            for key, val in items.items():
-                if type(key) != str or type(val) != Item:
-                    raise InvalidItemPoolError()
-            self.items = items
-        except InvalidItemPoolError():
-            print(f'Invalid item pool: "{items}".')
+        self.items = items
         
 
     def add_item(self, item):
-        try:
             if type(item) != Item:
                 raise InvalidItemPoolError()
             if item.name in self.items:
                 raise DuplicateItemError()
             self.items[item.name] = item
-        except InvalidItemPoolError():
-            print(f'Invalid item: "{item}".')
-        except DuplicateItemError():
-            print(f'Duplicate item: "{item}".')
-
 
     def remove_item(self, item_name):
-        try:
             if item_name not in self.items:
                 raise NonExistingItemError(item_name)
             del self.items[item_name]
-        except NonExistingItemError(item_name):
-            print(f'Non-existing item: "{item_name}".')
 
 
     def get_size(self):

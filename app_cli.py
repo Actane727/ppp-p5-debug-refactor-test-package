@@ -2,9 +2,7 @@ import random
 from core.items import Item, ItemPool
 from core.shoppinglist import ShoppingList
 from core.appengine import AppEngine
-# from core.errors import (InvalidItemNameError, InvalidItemPoolError, 
-#                          InvalidItemPriceError, InvalidShoppingListSizeError, 
-#                          DuplicateItemError, NonExistingItemError)
+
 
 class AppCLI:
     def __init__(self, shoppingList = None, items = None):
@@ -35,8 +33,9 @@ class AppCLI:
             self.process_ask()
         elif cmd == 'l' or cmd == 'list':
             self.app_engine.shopping_list.refresh(item_pool = self.app_engine.items)
-            self.app_engine.message = (f'Shopping list with {len(self.app_engine.shopping_list)}'
-                            f' items has been created.')
+            self.app_engine.message = (f'Shopping list with '
+                                       f'{len(self.app_engine.shopping_list)}'
+                                       f' items has been created.')
         elif cmd.startswith('show'):
             self.process_show(cmd)
         elif cmd.startswith('add'):
@@ -51,9 +50,11 @@ class AppCLI:
         q =random.randint(0, len(self.app_engine.shopping_list.list))
         self.app_engine.message= self.show_list(mask_index = q)
         if q<len(self.app_engine.shopping_list.list):
-            self.app_engine.correct_answer = self.app_engine.shopping_list.get_item_price(q)
+            self.app_engine.correct_answer\
+                  = self.app_engine.shopping_list.get_item_price(q)
         else:
-           self.app_engine.correct_answer = self.app_engine.shopping_list.get_total_price()
+           self.app_engine.correct_answer\
+              = self.app_engine.shopping_list.get_total_price()
 
 
     def process_show(self, cmd):
