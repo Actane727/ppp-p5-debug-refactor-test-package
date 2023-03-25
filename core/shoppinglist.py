@@ -1,5 +1,4 @@
 import random
-from core.items import Item
 from core.errors import InvalidShoppingListSizeError
 
 class ShoppingList:

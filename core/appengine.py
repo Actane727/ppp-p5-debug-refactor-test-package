@@ -1,5 +1,6 @@
 from core.items import Item
-from core.errors import InvalidItemNameError, InvalidItemPriceError, InvalidItemPoolError, NonExistingItemError, DuplicateItemError, InvalidShoppingListSizeError
+from core.errors import InvalidItemNameError, InvalidItemPriceError,\
+    NonExistingItemError, DuplicateItemError
 
 
 class AppEngine:
